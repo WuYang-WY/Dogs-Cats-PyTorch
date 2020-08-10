@@ -22,7 +22,7 @@ def train():
     print('Dataset loaded! length of train set is {0}'.format(len(datafile)))
 
     model = Net()                       # 实例化一个网络
-    # model = model.cuda()                # 网络送入GPU，即采用GPU计算，如果没有GPU加速，可以去掉".cuda()"
+    model = model.cuda()                # 网络送入GPU，即采用GPU计算，如果没有GPU加速，可以去掉".cuda()"
     model = nn.DataParallel(model)
     model.train()                       # 网络设定为训练模式，有两种模式可选，.train()和.eval()，训练模式和评估模式，区别就是训练模式采用了dropout策略，可以放置网络过拟合
 
@@ -34,8 +34,8 @@ def train():
     for epoch in range(nepoch):
         # 读取数据集中数据进行训练，因为dataloader的batch_size设置为16，所以每次读取的数据量为16，即img包含了16个图像，label有16个
         for img, label in dataloader:                                           # 循环读取封装后的数据集，其实就是调用了数据集中的__getitem__()方法，只是返回数据格式进行了一次封装
-            # img, label = Variable(img).cuda(), Variable(label).cuda()           # 将数据放置在PyTorch的Variable节点中，并送入GPU中作为网络计算起点
-            img, label = Variable(img), Variable(label)   
+            img, label = Variable(img).cuda(), Variable(label).cuda()           # 将数据放置在PyTorch的Variable节点中，并送入GPU中作为网络计算起点
+            # img, label = Variable(img), Variable(label)   
             out = model(img)                                                    # 计算网络输出值，就是输入网络一个图像数据，输出猫和狗的概率，调用了网络中的forward()方法
             loss = criterion(out, label.squeeze())      # 计算损失，也就是网络输出值和实际label的差异，显然差异越小说明网络拟合效果越好，此处需要注意的是第二个参数，必须是一个1维Tensor
             loss.backward()                             # 误差反向传播，采用求导的方式，计算网络中每个节点参数的梯度，显然梯度越大说明参数设置不合理，需要调整

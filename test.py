@@ -53,7 +53,7 @@ def test():
     start=time.time()
     # setting model
     model = Net()                                       # 实例化一个网络
-    # model.cuda()                                        # 送入GPU，利用GPU计算
+    model.cuda()                                        # 送入GPU，利用GPU计算
     model = nn.DataParallel(model)
     model.load_state_dict(torch.load(model_file))       # 加载训练好的模型参数
     model.eval()                                        # 设定为评估模式，即计算过程中不要dropout
