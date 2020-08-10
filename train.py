@@ -46,9 +46,8 @@ def train():
             optimizer.step()  # 优化采用设定的优化方法对网络中的各个参数进行调整
             optimizer.zero_grad()  # 清除优化器中的梯度以便下一次计算，因为优化器默认会保留，不清除的话，每次计算梯度都回累加
             cnt += 1
-            if cnt % 1000 is 0:
-                print('Epoch:{0},Frame:{1}, train_loss {2}'.format(epoch, cnt * batch_size,
-                                                                   loss / batch_size))  # 打印一个batch size的训练结果
+            # print('Epoch:{0},Frame:{1}, train_loss {2}'.format(epoch, cnt * batch_size,loss / batch_size))  # 打印一个batch size的训练结果
+        print(epoch)
 
     torch.save(model.state_dict(), '{0}/model.pth'.format(model_cp))  # 训练所有数据后，保存网络的参数
     print(time.time() - start)
